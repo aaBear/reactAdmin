@@ -24,15 +24,15 @@ class Login extends Component {
     
     // 校验逻辑
     validator = (rule, value, callback) => {
-        const name = rule.field === 'username' ? '用户名' : '密码';
+        const name = rule.fullField === 'username' ? '用户名' : '密码';
         if (!value) {
-            callback(`请输入${name}`);
-        } else if (value.length < 3) {
-            callback(`${name}必须大于2位`);
-        } else if (value.length > 8) {
-            callback(`${name}必须小于9位`);
-        } else if (!/^[a-zA-Z0-9]+$/.test()) {
+            callback(`${name}不能为空`);
+        } else if (!/^[a-zA-Z0-9]+$/.test(value)) {
             callback(`${name}只能包含字母和数字`);
+        } else if (value.length < 3) {
+            callback(`${name}长度不能小于3位`);
+        } else if (value.length > 8) {
+            callback(`${name}长度不能大于8位`);
         } else {
             callback();
         }
@@ -56,7 +56,7 @@ class Login extends Component {
                                     'username',
                                     {rules: [{validator: this.validator}]}
                                 )(
-                                    <Input className="login-input" prefix={<Icon type="user" style={{ color: 'rgba(0,0,0,.25)' }} />} placeholder="用户名"></Input>
+                                    <Input className="login-input" prefix={<Icon type="user" style={{ color: 'rgba(0,0,0,.25)' }} />} placeholder="用户名" autoComplete="off" />
                                 )
                             } 
                             
@@ -67,7 +67,7 @@ class Login extends Component {
                                     'password',
                                     {rules: [{validator: this.validator}]}
                                 )(
-                                    <Input className="login-input" prefix={<Icon type="lock" style={{ color: 'rgba(0,0,0,.25)' }} />} placeholder="密码" type="password"></Input>
+                                    <Input className="login-input" prefix={<Icon type="lock" style={{ color: 'rgba(0,0,0,.25)' }} />} placeholder="密码" type="password" />
                                 )
                             }
                         </Item>
