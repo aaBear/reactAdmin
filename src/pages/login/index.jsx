@@ -1,34 +1,28 @@
 import React, { Component } from 'react';
 import { Form, Icon, Input, Button, message } from 'antd';
-import axios from 'axios';
 
 import logo from './logo.png';
 import './index.less';
+import { reqLogin } from '../../api';
 
 // 缓存
 const Item = Form.Item;
 
 
 class Login extends Component {
+  // 登录函数
   login = (e) => {
     e.preventDefault();
     // 进行校验
-    this.props.form.validateFields((error, values) => {
+    this.props.form.validateFields(async (error, values) => {
       if (!error) {
         const { username, password } = values;
-        axios.post('/login', { username, password })
-          .then((res) => {
-            const { data } = res;
-            if (data.status === 0) {
-              this.props.history.replace('/');
-            } else {
-              message.error(data.msg, 2);
-              this.props.form.resetFields(['password']);
-            }
-          })
-          .catch((err) => {
-            message.error('网络异常，请刷新重试')
-          })
+        const result = await reqLogin(username, password)
+        if (result) {  // 登录成功跳转主页
+          this.props.history.replace('/');
+        } else {  // 登录失败清空密码
+          this.props.form.resetFields(['password']);
+        }
       } else {
         console.log('登录表单校验失败：', error);
       }
