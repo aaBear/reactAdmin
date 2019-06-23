@@ -1,11 +1,45 @@
 import React, {Component} from 'react';
+import { Layout } from 'antd';
 
-class Admin extends Component {
+import LeftNav from '../../components/left-nav';
+import HeaderMain from '../../components/header-main';
+
+const { Header, Content, Footer, Sider } = Layout;
+
+
+
+export default class Admin extends Component {
+  state = {
+    // false:展开 true:隐藏
+    collapsed: false
+  }
+
+  // 导航条左侧收缩
+  onCollapse = collapsed => {
+    this.setState({ collapsed })
+  }
+
   render() {
+    const { collapsed } = this.state;
     return (
-      <div>Admin</div>
+      <Layout style={{ minHeight: '100vh' }}>
+        <Sider collapsible collapsed={collapsed} onCollapse={this.onCollapse}>
+          <LeftNav collapsed={collapsed} />
+        </Sider>
+        <Layout>
+          <Header style={{ background: '#fff', padding: 0, minHeight: 100 }}>
+            <HeaderMain/>            
+          </Header>
+          <Content style={{ margin: '25px 16px' }}>
+            <div style={{ padding: 24, background: '#fff', minHeight: 360 }}>
+              欢迎使用尚硅谷后台管理系统
+            </div>
+          </Content>
+          <Footer style={{ textAlign: 'center' }}>
+            推荐使用谷歌浏览器，可以获得更佳页面操作体验
+          </Footer>
+        </Layout>
+      </Layout>
     )
   }
 }
-
-export default Admin;
