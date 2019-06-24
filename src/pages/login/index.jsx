@@ -2,6 +2,7 @@ import React from 'react';
 import { Form, Icon, Input, Button } from 'antd';
 
 import { reqLogin } from '../../api';
+import { setUserStorage } from '../../utils/storage-tools'
 
 import logo from '../../assets/images/logo.png';
 import './index.less';
@@ -20,6 +21,10 @@ function Login(props) {
         const { username, password } = values;
         const result = await reqLogin(username, password);
         if (result) {  // 登录成功跳转主页
+          
+          // 设置用户登录记录缓存
+          setUserStorage(result);
+
           props.history.replace('/');
         } else {  // 登录失败清空密码
           props.form.resetFields(['password']);
@@ -48,6 +53,7 @@ function Login(props) {
 
   // 获取表单校验方法
   const { getFieldDecorator } = props.form;
+
   return (
     <div className="login">
       <header className="login-header">

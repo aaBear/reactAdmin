@@ -3,6 +3,8 @@ import { Layout } from 'antd';
 
 import LeftNav from '../../components/left-nav';
 import HeaderMain from '../../components/header-main';
+import { getUserStorage } from '../../utils/storage-tools';
+import { reqValidateUer } from '../../api/index';
 
 const { Header, Content, Footer, Sider } = Layout;
 
@@ -17,6 +19,16 @@ export default class Admin extends Component {
   // 导航条左侧收缩
   onCollapse = collapsed => {
     this.setState({ collapsed })
+  }
+
+  // 校验用户是否已登录过
+  async componentWillMount() {
+    const user = getUserStorage();
+    if (user || user._id) {
+      const result = await reqValidateUer(user._id);
+      if (result) return;
+    }
+    this.props.history.replace('/login');
   }
 
   render() {

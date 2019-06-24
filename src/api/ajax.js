@@ -5,12 +5,12 @@ import { message } from 'antd';
   处理请求
 */
 export default function ajax(url, data = {}, method = 'get') {
-  let reqParamms = data;
+  let reqParams = data;
   method = method.toLowerCase();
   // get请求的对象传参方式
-  if (method === 'get') reqParamms = {params: data};
+  if (method === 'get') reqParams = {params: data};
 
-  return axios[method](url, reqParamms)
+  return axios[method](url, reqParams)
   .then((res) => {
     const { data } = res;
     if (data.status === 0) {
