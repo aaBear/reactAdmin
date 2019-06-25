@@ -1,13 +1,24 @@
 import React, { Component } from 'react';
 import { Card, Button, Icon, Table, Pagination } from 'antd';
 
-import MyBtn from '../../components/my-btn'
+import MyBtn from '../../components/my-btn';
+import { reqCategory } from '../../api';
 
 import './index.less';
 
 export default class Category extends Component {
-  render() {
+  state = {
+    categories: [], // 一级分类列表
+  }
 
+  async componentDidMount() {
+    // 请求商品(表身)信息并更新
+    const result = await reqCategory('0');
+    if (result) this.setState({categories: result});
+    
+  }
+
+  render() {
     // 表头
     const columns = [
       {
@@ -29,72 +40,21 @@ export default class Category extends Component {
         }
       }
     ];
-    // 表身
-    const data = [
-      {
-        key: '1',
-        name: '手机',
-        operate: '',
-      },
-      {
-        key: '2',
-        name: '电脑',
-        operate: '',
-      },
-      {
-        key: '3',
-        name: '平板',
-        operate: '',
-      },
-      {
-        key: '4',
-        name: '鼠标',
-        operate: '',
-      },
-      {
-        key: '5',
-        name: '键盘',
-        operate: '',
-      },
-      {
-        key: '6',
-        name: '耳机',
-        operate: '',
-      },
-      {
-        key: '7',
-        name: '笔记本',
-        operate: '',
-      },
-      {
-        key: '8',
-        name: '音响',
-        operate: '',
-      },
-      {
-        key: '9',
-        name: '麦克风',
-        operate: '',
-      },
-      {
-        key: '10',
-        name: '座机',
-        operate: '',
-      },
-    ];
+    
 
     return (
       <div>
         <Card title="一级分类列表" extra={<Button type="primary"><Icon type="plus" />添加品类</Button>}>
           <Table
             columns={columns}
-            dataSource={data}
+            dataSource={this.state.categories}
+            rowKey="_id"
             bordered
             pagination={{
               showSizeChanger: true,
               showQuickJumper: true,
               defaultPageSize: 3,
-              pageSizeOptions: ['3', '6', '9', '12'],
+              pageSizeOptions: ['3', '6', '9', '12']
             }}
           />
         </Card>

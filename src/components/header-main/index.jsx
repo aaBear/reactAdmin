@@ -15,7 +15,7 @@ const { confirm } = Modal;
 class HeaderMain extends Component {
   state = {
     sysTime: Date.now(),
-    weather: 'aa',
+    weather: '晴',
     weatherImg: 'http://api.map.baidu.com/images/weather/day/qing.png'
   }
 

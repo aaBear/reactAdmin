@@ -26,10 +26,16 @@ const reqWeather = () => {
   })
 }
 
+// 商品数据接口
+const reqCategory = (parentId) => ajax('/manage/category/list', {parentId});
+
 export {
   reqLogin,
   reqValidateUer,
-  reqWeather
+  reqWeather,
+  reqCategory
 }
+
+
 
 
