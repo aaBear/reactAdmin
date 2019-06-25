@@ -34,11 +34,19 @@ const reqWeather = () => {
 // 商品数据接口
 const reqCategory = (parentId) => ajax('/manage/category/list', {parentId});
 
+// 添加分类接口
+const reqAddCategory = (categoryName, parentId) => ajax('/manage/category/add', {categoryName, parentId}, 'post');
+
+// 修改分类接口
+const reqUpdateCategory = (categoryName, categoryId) => ajax('/manage/category/update', {categoryName, categoryId}, 'post');
+
 export {
   reqLogin,
   reqValidateUer,
   reqWeather,
-  reqCategory
+  reqCategory,
+  reqAddCategory,
+  reqUpdateCategory
 }
 
 
