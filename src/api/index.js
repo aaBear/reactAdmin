@@ -10,8 +10,9 @@ const reqValidateUer = (id) => ajax('/validate/user', {id}, 'post');
 
 // 天气接口
 const reqWeather = () => {
-  return new Promise((resolve, reject) => {
-    jsonp('http://api.map.baidu.com/telematics/v3/weather?location=深圳&output=json&ak=3p49MVra6urFRGOT9s8UBWr2', {}, (err, data) => {
+  let cancel = null;
+  const promise = new Promise((resolve, reject) => {
+    cancel = jsonp('http://api.map.baidu.com/telematics/v3/weather?location=深圳&output=json&ak=3p49MVra6urFRGOT9s8UBWr2', {}, (err, data) => {
       const { dayPictureUrl, weather } = data.results[0].weather_data[0];
       if (!err) {
         resolve({
@@ -20,10 +21,14 @@ const reqWeather = () => {
         });
       } else {
         message.error('请求天气信息失败', 2);
-        reject();
+        resolve();
       }
     })
   })
+  return {
+    promise,
+    cancel
+  }
 }
 
 // 商品数据接口

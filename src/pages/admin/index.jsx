@@ -22,8 +22,9 @@ const { Header, Content, Footer, Sider } = Layout;
 
 export default class Admin extends Component {
   state = {
-    // false:展开 true:隐藏
-    collapsed: false
+    collapsed: false,
+    isLoading: false,
+    success: true
   }
 
   // 导航条左侧收缩
@@ -34,17 +35,27 @@ export default class Admin extends Component {
   // 校验用户是否已登录过
   async componentWillMount() {
     const user = getUserStorage();
-    if (user || user._id) {
+    if (user && user._id) {
       const result = await reqValidateUer(user._id);
-      if (result) return;
+      if (result) {
+        return this.setState({
+          isLoading: false,
+          success: true
+        })
+      };
     }
-    this.props.history.replace('/login');
+    this.setState({
+      isLoading: false,
+      success: false
+    })
   }
 
   render() {
-    const { collapsed } = this.state;
-    return (
-      <Layout style={{ minHeight: '100vh' }}>
+    const { collapsed, isLoading, success } = this.state;
+    if (isLoading) return null;
+
+    return ( 
+      success ? <Layout style={{ minHeight: '100vh' }}>
         <Sider collapsible collapsed={collapsed} onCollapse={this.onCollapse}>
           <LeftNav collapsed={collapsed} />
         </Sider>
@@ -72,6 +83,7 @@ export default class Admin extends Component {
           </Footer>
         </Layout>
       </Layout>
-    )
+      : <Redirect to="/login"/> 
+     )
   }
 }

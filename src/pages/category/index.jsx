@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { Card, Button, Icon, Table, Pagination } from 'antd';
+import { Card, Button, Icon, Table } from 'antd';
 
 import MyBtn from '../../components/my-btn';
 import { reqCategory } from '../../api';

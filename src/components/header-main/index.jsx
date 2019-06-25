@@ -28,19 +28,30 @@ class HeaderMain extends Component {
 
   async componentDidMount() {
     // 更新时间
-    setInterval(() => {
+    this.timer = setInterval(() => {
       this.setState({
         sysTime: Date.now()
       })
     }, 1000);
 
     // 更新天气
-    const result = await reqWeather();
+    const { promise, cancel } = reqWeather();
+    // 取消请求天气的函数
+    this.cancel = cancel;
+    // 请求天气
+    const result = await promise;
     if (result) this.setState(result);
   }
 
   componentWillReceiveProps(nextProps) {
     this.title = this.getTitle(nextProps)
+  }
+
+  componentWillUnmount() {
+    // 清除定时器
+    clearInterval(this.timer);
+    // 取消请求天气
+    this.cancel();
   }
 
   // 用户注销
