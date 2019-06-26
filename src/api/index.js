@@ -13,15 +13,20 @@ const reqWeather = () => {
   let cancel = null;
   const promise = new Promise((resolve, reject) => {
     cancel = jsonp('http://api.map.baidu.com/telematics/v3/weather?location=深圳&output=json&ak=3p49MVra6urFRGOT9s8UBWr2', {}, (err, data) => {
-      const { dayPictureUrl, weather } = data.results[0].weather_data[0];
-      if (!err) {
-        resolve({
-          weatherImg: dayPictureUrl,
-          weather
-        });
-      } else {
+      try {
+        if (!err) {
+          const { dayPictureUrl, weather } = data.results[0].weather_data[0];
+          resolve({
+            weatherImg: dayPictureUrl,
+            weather
+          });
+        } else {
+          message.error('请求天气信息失败', 2);
+          resolve();
+        }
+      } catch {
         message.error('请求天气信息失败', 2);
-        resolve();
+          resolve();
       }
     })
   })

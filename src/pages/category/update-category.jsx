@@ -22,7 +22,7 @@ class UpdateCategory extends Component {
           {getFieldDecorator(
               'categoryName',
               {
-                initiaValue: this.props.categoryName,
+                initialValue: this.props.categoryName,
                 rules: [{validator: this.validator}]
               }
             )(

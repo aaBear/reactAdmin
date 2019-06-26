@@ -12,25 +12,44 @@ import './index.less';
 export default class Category extends Component {
   state = {
     categories: [], // 一级分类列表
+    subCategories: [], // 二级分类列表
     addVisible: false,
     updateVisible: false,
+    subDateVisible: false,
+    loading: true
   }
 
   category = {};
 
-  async componentDidMount() {
+  componentDidMount() {
     // 请求商品(表身)信息并更新
-    const result = await reqCategory('0');
-    if (result) this.setState({categories: result});
+    this.getCategoies('0');
+  }
+  
+  // 请求商品分类
+  getCategoies = async (parentId) => {
+    this.setState({loading: true});
     
+    const result = await reqCategory(parentId);
+    if (result) {
+      if (parentId === '0') {
+        // 请求到一级级数据
+        this.setState({categories: result});
+      } else {
+        // 请求到二级数据
+        this.setState({
+          subCategories: result,
+          subDateVisible: true
+        })
+      }
+    }
+    this.setState({loading: false});
   }
 
   // 切换弹窗
   toggleDisplay = (stateName, stateStatus) => {
     return () => {
-      this.setState({
-        [stateName]: stateStatus
-      })
+      this.setState({[stateName]: stateStatus});
     }
   }
 
@@ -51,7 +70,13 @@ export default class Category extends Component {
           // 关闭弹窗
           const options = {addVisible: false};
           // 展示添加后的数据
-          if (result.parentId === '0') options.categories = [...this.state.categories, result];
+          const { categories, subDateVisible, subCategories } = this.state;
+          if (result.parentId === '0') {
+            options.categories = [...categories, result];
+          } else if (subDateVisible && result.parentId === this.parentCategory._id) {
+            options.subCategories = [...subCategories, result];
+          }
+          
           // 统一更新
           this.setState(options);
 
@@ -70,17 +95,15 @@ export default class Category extends Component {
     })
   }
 
-  // 保存
+  // 保存选中数据
   saveCategory = (category) => {
     return () => {
       this.category = category;
-
-      this.setState({
-        updateVisible: true
-      })
+      this.setState({updateVisible: true});
     }
   }
 
+  // 修改分类名称
   updateCategory = () => {
     const { form } = this.updateCategoryForm.props;
     form.validateFields(async (errors, values) => {
@@ -89,8 +112,18 @@ export default class Category extends Component {
         const categoryId = this.category._id
         const result = await reqUpdateCategory(categoryName, categoryId);
         if (result) {
+          const { parentId } = this.category;
+          let categoryData = this.state.categories;
+          let stateName = 'categories';
+          if (parentId !== '0') {
+            // 二级
+            categoryData = this.state.subCategories;
+            stateName = 'subCategories';
+          }
+          
           // 深拷贝数组，避免修改原数据
-          const categories = this.state.categories.map((category) => {
+          const categories = categoryData.map((category) => {
+            // 获取选中数据
             let { _id, name, parentId } = category;
             // 修改对应id的名称
             if (_id === categoryId) {
@@ -104,21 +137,42 @@ export default class Category extends Component {
             // 没有修改的数据直接返回
             return category;
           })
-
           message.success('更新成功', 2);
 
           form.resetFields(['categoryName']);
           this.setState({
             updateVisible: false,
-            categories
+            [stateName]: categories
           })
         }
       }
     })
   }
 
+  // 展示子类数据
+  showSub = (category) => {
+    return async () => {
+      // 记录子类的父类
+      this.parentCategory = category;
+      // 获取子类数据
+      this.getCategoies(category._id);
+    }
+  }
+
+  // 回到一级分类
+  goBack = () => {
+    this.setState({subDateVisible: false});
+  }
+
   render() {
-    const { categories, addVisible, updateVisible } = this.state;
+    const {
+      categories,
+      subCategories, 
+      addVisible, 
+      updateVisible, 
+      subDateVisible,
+      loading
+    } = this.state;
 
     // 表头
     const columns = [
@@ -134,20 +188,23 @@ export default class Category extends Component {
           return (
             <div>
               <MyBtn onClick={this.saveCategory(category)}>修改名称</MyBtn>
-              <MyBtn>查看子类</MyBtn>
+              {
+                subDateVisible ? null : <MyBtn onClick={this.showSub(category)}>查看子类</MyBtn>
+              }
             </div>
           )
         }
       }
     ];
-
     return (
       <div>
-        <Card title="一级分类列表" extra={<Button type="primary" onClick={this.toggleDisplay('addVisible', true)}><Icon type="plus" />添加品类</Button>}>
+        <Card title={subDateVisible ? <div><MyBtn onClick={this.goBack} >一级分类</MyBtn><Icon type="right"/> {this.parentCategory.name}</div> : "一级分类列表"}
+          extra={<Button type="primary" onClick={this.toggleDisplay('addVisible', true)}><Icon type="plus" />添加品类</Button>}>
           <Table
             columns={columns}
-            dataSource={categories}
+            dataSource={subDateVisible ? subCategories : categories}
             rowKey="_id"
+            loading={loading}
             bordered
             pagination={{
               showSizeChanger: true,

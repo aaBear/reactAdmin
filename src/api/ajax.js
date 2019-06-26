@@ -23,4 +23,3 @@ export default function ajax(url, data = {}, method = 'get') {
     message.error('网络异常，请刷新重试', 2);
   })
 }
-
