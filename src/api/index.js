@@ -51,6 +51,9 @@ const reqProducts = (pageNum, pageSize) => ajax('/manage/product/list', {pageNum
 // 添加商品接口
 const reqAddProducts = ({name, desc, price, categoryId, pCategoryId, detail}) => ajax('/manage/product/add', {name, desc, price, categoryId, pCategoryId, detail}, 'post');
 
+// 修改商品接口
+const reqUpdateProducts = ({name, desc, price, categoryId, pCategoryId, detail, _id}) => ajax('/manage/product/update', {name, desc, price, categoryId, pCategoryId, detail, _id}, 'post');
+
 export {
   reqLogin,
   reqValidateUer,
@@ -59,7 +62,8 @@ export {
   reqAddCategory,
   reqUpdateCategory,
   reqProducts,
-  reqAddProducts
+  reqAddProducts,
+  reqUpdateProducts
 }
 
 

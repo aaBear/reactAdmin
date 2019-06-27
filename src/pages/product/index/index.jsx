@@ -15,6 +15,7 @@ export default class Indext extends Component {
     loading: true
   }
 
+  // 显示列表
   getProducts = async (pageNum, pageSize) => {
     this.setState({loading: true});
     const result = await reqProducts(pageNum, pageSize);
@@ -33,8 +34,16 @@ export default class Indext extends Component {
     this.getProducts(1, 3);
   }
 
-  showAppProduct = () => {
+  // 跳转到产品页，添加
+  toAppProduct = () => {
     this.props.history.push('/product/update');
+  }
+
+  // 跳转到产品页，修改
+  toUpdateProduct = (product) => {
+    return () => {
+      this.props.history.push('/product/update', product);
+    }
   }
 
   render() {
@@ -70,7 +79,7 @@ export default class Indext extends Component {
           return (
             <div>
               <MyBtn>详情</MyBtn>
-              <MyBtn>修改</MyBtn>
+              <MyBtn onClick={this.toUpdateProduct(product)}>修改</MyBtn>
             </div>
           )
         }
@@ -90,7 +99,7 @@ export default class Indext extends Component {
             <Button type="primary">搜索</Button>
           </div>
         }
-        extra={<Button type="primary" onClick={this.showAppProduct}><Icon type="plus"/>添加产品</Button>}
+        extra={<Button type="primary" onClick={this.toAppProduct}><Icon type="plus"/>添加产品</Button>}
       >
         <Table
           columns={columns}
