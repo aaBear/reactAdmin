@@ -45,13 +45,21 @@ const reqAddCategory = (categoryName, parentId) => ajax('/manage/category/add', 
 // 修改分类接口
 const reqUpdateCategory = (categoryName, categoryId) => ajax('/manage/category/update', {categoryName, categoryId}, 'post');
 
+// 产品列表接口
+const reqProducts = (pageNum, pageSize) => ajax('/manage/product/list', {pageNum, pageSize});
+
+// 添加商品接口
+const reqAddProducts = ({name, desc, price, categoryId, pCategoryId, detail}) => ajax('/manage/product/add', {name, desc, price, categoryId, pCategoryId, detail}, 'post');
+
 export {
   reqLogin,
   reqValidateUer,
   reqWeather,
   reqCategory,
   reqAddCategory,
-  reqUpdateCategory
+  reqUpdateCategory,
+  reqProducts,
+  reqAddProducts
 }
 
 

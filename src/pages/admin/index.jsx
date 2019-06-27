@@ -67,8 +67,8 @@ export default class Admin extends Component {
             <div style={{ padding: 24, background: '#fff', minHeight: 360 }}>
               <Switch>
                 <Route path="/home" component={Home}/>
-                <Route path="/products/category" component={Category}/>
-                <Route path="/products/product" component={Product}/>
+                <Route path="/category" component={Category}/>
+                <Route path="/product" component={Product}/>
                 <Route path="/user" component={User}/>
                 <Route path="/role" component={Role}/>
                 <Route path="/charts/bar" component={Bar}/>

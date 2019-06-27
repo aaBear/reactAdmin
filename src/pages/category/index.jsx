@@ -22,7 +22,7 @@ export default class Category extends Component {
   category = {};
 
   componentDidMount() {
-    // 请求商品(表身)信息并更新
+    // 首次请求商品
     this.getCategoies('0');
   }
   
