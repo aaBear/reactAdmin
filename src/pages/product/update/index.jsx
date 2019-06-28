@@ -6,6 +6,7 @@ import { convertToRaw } from 'draft-js';
 import MyBtn from '../../../components/my-btn';
 import { reqCategory, reqAddProducts, reqUpdateProducts } from '../../../api';
 import RichTextEditor from './rich-text-editor';
+import UploadImg from './upload-img'
 
 import './index.less';
 
@@ -229,7 +230,7 @@ class Update extends Component {
             }
           </Item>
           <Item label="商品图片">
-            <RichTextEditor/>
+            <UploadImg imgs={product ? product.imgs : []} id={product ? product._id : ''}/>
           </Item>
           <Item label="商品详情" wrapperCol={{span: 20}}>
             <RichTextEditor ref={this.richTextRef} detail={product ? product.detail : ''}/>

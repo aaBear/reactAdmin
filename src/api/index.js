@@ -54,6 +54,9 @@ const reqAddProducts = ({name, desc, price, categoryId, pCategoryId, detail}) =>
 // 修改商品接口
 const reqUpdateProducts = ({name, desc, price, categoryId, pCategoryId, detail, _id}) => ajax('/manage/product/update', {name, desc, price, categoryId, pCategoryId, detail, _id}, 'post');
 
+// 删除上传图片
+const reqDeleteImg = (name, id) => ajax('/manage/img/delete', {name, id}, 'post');
+
 export {
   reqLogin,
   reqValidateUer,
@@ -63,7 +66,8 @@ export {
   reqUpdateCategory,
   reqProducts,
   reqAddProducts,
-  reqUpdateProducts
+  reqUpdateProducts,
+  reqDeleteImg
 }
 
 
