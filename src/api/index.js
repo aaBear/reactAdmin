@@ -57,6 +57,12 @@ const reqUpdateProducts = ({name, desc, price, categoryId, pCategoryId, detail, 
 // 删除上传图片
 const reqDeleteImg = (name, id) => ajax('/manage/img/delete', {name, id}, 'post');
 
+// 搜索关键字
+const reqSearch = ({searchType, searchContent, pageSize, pageNum}) => ajax('/manage/product/search', {[searchType]: searchContent, pageSize, pageNum});
+
+// 更新上下架
+const reqUpdateStatus = (productId, status) => ajax('/manage/product/updateStatus', {productId, status}, 'post');
+
 export {
   reqLogin,
   reqValidateUer,
@@ -67,7 +73,9 @@ export {
   reqProducts,
   reqAddProducts,
   reqUpdateProducts,
-  reqDeleteImg
+  reqDeleteImg,
+  reqSearch,
+  reqUpdateStatus
 }
 
 
